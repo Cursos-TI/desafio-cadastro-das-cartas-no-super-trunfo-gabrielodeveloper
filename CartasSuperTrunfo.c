@@ -10,11 +10,14 @@ int main() {
     // Variáveis para cadastro
     char codeCity[4];  // Código da cidade no formato "A01", "B02", etc.
     char name[30];      // Nome da cidade
-    float population;
+    int population;
     float area;
     float pib;
     int numberOfTouristAttractions;
     char continuar;
+
+    float populationDensity;
+    float pibPerCapita;
 
     printf("Olá, este é o jogo de Super Trunfo! Cadastre suas cartas.\n");
 
@@ -29,7 +32,7 @@ int main() {
         fgets(name, sizeof(name), stdin);
 
         printf("Digite a quantidade de habitantes da cidade: ");
-        scanf("%f", &population);
+        scanf("%d", &population);
 
         printf("Digite a área da cidade em km²: ");
         scanf("%f", &area);
@@ -40,15 +43,20 @@ int main() {
         printf("Digite a quantidade de pontos turísticos da cidade: ");
         scanf("%d", &numberOfTouristAttractions);
 
+        populationDensity = population / area;
+        pibPerCapita = pib / population;
+
         // Exibição dos dados cadastrados
         printf("\n--- Resumo da Cidade Cadastrada ---\n");
         printf("Código da cidade: %s\n", codeCity);
         printf("Nome da cidade: %s", name);  // `fgets` já inclui a quebra de linha
-        printf("População: %.2f habitantes\n", population);
+        printf("População: %d habitantes\n", population);
         printf("Área: %.2f km²\n", area);
         printf("PIB: %.2f\n", pib);
         printf("Número de pontos turísticos: %d\n", numberOfTouristAttractions);
-
+        printf("Densidade Populacional: %.2f hab/km²\n", populationDensity);
+        printf("PIB per Capita: %.2f reais ", pibPerCapita);
+        
         // Pergunta se deseja cadastrar outra cidade
         printf("\nDeseja cadastrar outra cidade? (S/N): ");
         scanf(" %c", &continuar);
