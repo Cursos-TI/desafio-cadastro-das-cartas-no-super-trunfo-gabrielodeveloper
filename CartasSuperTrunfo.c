@@ -1,82 +1,86 @@
 #include <stdio.h>
 
-// Função para cadastrar uma cidade
-void registerCity(char codeCity[], char name[], int *population, float *area, float *pib, int *numberOfTouristAttractions) {
+// Estrutura para armazenar os atributos de uma cidade
+typedef struct {
+    char code[4];
+    char name[30];
+    int population;
+    float area;
+    float pib;
+    int numberOfTouristAttractions;
+    float populationDensity;
+} City;
+
+// Função para cadastrar uma cidade.
+void registerCity(City *city) {
     printf("\nDigite o código da cidade (formato A01, B02, etc.): ");
-    scanf("%3s", codeCity);
+    scanf("%3s", city->code);
     getchar();
 
     printf("Digite o nome da cidade: ");
-    fgets(name, 30, stdin);
+    fgets(city->name, 30, stdin);
 
     printf("Digite a quantidade de habitantes da cidade: ");
-    scanf("%d", population);
+    scanf("%d", &city->population);
 
     printf("Digite a área da cidade em km²: ");
-    scanf("%f", area);
+    scanf("%f", &city->area);
 
     printf("Digite o PIB da cidade: ");
-    scanf("%f", pib);
+    scanf("%f", &city->pib);
 
     printf("Digite a quantidade de pontos turísticos da cidade: ");
-    scanf("%d", numberOfTouristAttractions);
+    scanf("%d", &city->numberOfTouristAttractions);
+    
+    // Cálculo da densidade populacional
+    city->populationDensity = city->population / city->area;
+}
+
+// Função para comparar os atributos
+void compareAttributes(City c1, City c2, int choice) {
+    printf("\nComparação pelo atributo selecionado:\n");
+    switch (choice) {
+        case 1:
+            printf("População: %d vs %d\n", c1.population, c2.population);
+            if (c1.population > c2.population) printf("Vencedor: %s", c1.name);
+            else if (c2.population > c1.population) printf("Vencedor: %s", c2.name);
+            else printf("Empate!\n");
+            break;
+        case 2:
+            printf("PIB: %.2f vs %.2f\n", c1.pib, c2.pib);
+            if (c1.pib > c2.pib) printf("Vencedor: %s", c1.name);
+            else if (c2.pib > c1.pib) printf("Vencedor: %s", c2.name);
+            else printf("Empate!\n");
+            break;
+        case 3:
+            printf("Pontos turísticos: %d vs %d\n", c1.numberOfTouristAttractions, c2.numberOfTouristAttractions);
+            if (c1.numberOfTouristAttractions > c2.numberOfTouristAttractions) printf("Vencedor: %s", c1.name);
+            else if (c2.numberOfTouristAttractions > c1.numberOfTouristAttractions) printf("Vencedor: %s", c2.name);
+            else printf("Empate!\n");
+            break;
+        default:
+            printf("Opção inválida!\n");
+    }
 }
 
 int main() {
-    // Variáveis para as duas cidades
-    char codeCity1[4], name1[30];
-    int population1, numberOfTouristAttractions1;
-    float area1, pib1;
+    City city1, city2;
+    int choice;
 
-    char codeCity2[4], name2[30];
-    int population2, numberOfTouristAttractions2;
-    float area2, pib2;
+    //Cadastrar das cidades 
+    printf("Cadastro do primeira cidade:\n");
+    registercity(&city1);
+    printf("Cadastro do segunda cidade:\n");
+    registercity(&city2);
 
-    // Cadastro das cidades
-    printf("Cadastro da primeira cidade:\n");
-    registerCity(codeCity1, name1, &population1, &area1, &pib1, &numberOfTouristAttractions1);
-  
-    // Cálculo dos atributos derivados
-    float populationDensity1 = population1 / area1;
-    float pibPerCapita1 = pib1 / population1;
-  
-         // Exibição dos dados cadastrados
-        printf("\n--- Resumo da Cidade Cadastrada ---\n");
-        printf("Código da cidade: %s\n", codeCity1);
-        printf("Nome da cidade: %s", name1);  // fgets já inclui a quebra de linha
-        printf("População: %d habitantes\n", population1);
-        printf("Área: %.2f km²\n", area1);
-        printf("PIB: %.2f\n", pib1);
-        printf("Número de pontos turísticos: %d\n", numberOfTouristAttractions1);
-        printf("Densidade Populacional: %.2f hab/km²\n", populationDensity1);
-        printf("PIB per Capita: %.2f reais \n", pibPerCapita1);
+    printf("\nEscolha o atributo para comparar:\n");
+    printf("1 - População\n");
+    printf("2 - PIB\n");
+    printf("3 - Número de pontos turísticos\n");
+    printf("Digite sua escolha: ");
+    scanf("%d", &choice);
 
-    printf("\nCadastro da segunda cidade:\n");
-    registerCity(codeCity2, name2, &population2, &area2, &pib2, &numberOfTouristAttractions2);
-
-    float populationDensity2 = population2 / area2;
-    float pibPerCapita2 = pib2 / population2;
-  
-          // Exibição dos dados cadastrados
-        printf("\n--- Resumo da Cidade Cadastrada ---\n");
-        printf("Código da cidade: %s\n", codeCity2);
-        printf("Nome da cidade: %s", name2);  // fgets já inclui a quebra de linha
-        printf("População: %d habitantes\n", population2);
-        printf("Área: %.2f km²\n", area2);
-        printf("PIB: %.2f\n", pib2);
-        printf("Número de pontos turísticos: %d\n", numberOfTouristAttractions2);
-        printf("Densidade Populacional: %.2f hab/km²\n", populationDensity2);
-        printf("PIB per Capita: %.2f reais \n", pibPerCapita2);
-
-        // Comparação pela população
-        printf("Comparação pelo atributo: População\n");
-        printf("%s: %d habitantes \n", name1, population1);
-        printf("%s: %d habitantes \n", name2, population2);
-
-          if (population1 > population2)
-              printf("Vencedor: %s \n", name1);
-          else
-              printf("Vencedor: %s \n", name2);
+    compareAttributes(city1, city1, choice);
 
     return 0;
 }
